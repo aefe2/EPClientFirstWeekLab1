@@ -5715,7 +5715,7 @@
                 }
                 var _b = this, cache = _b.cache, keys = _b.keys;
                 var key = vnode.key == null ? // same constructor may get registered as different local components
-                                              // so cid alone is not enough (#3269)
+                    // so cid alone is not enough (#3269)
                     componentOptions.Ctor.cid + (componentOptions.tag ? "::".concat(componentOptions.tag) : '') : vnode.key;
                 if (cache[key]) {
                     vnode.componentInstance = cache[key].componentInstance;
