@@ -92,3 +92,7 @@ textarea {
 a {
     text-decoration: none;
 }
+
+.outOfStock {
+    text-decoration: line-through;
+}
