@@ -1,7 +1,8 @@
 body {
-    font-family: tahoma;
+    /*font-family: tahoma;*/
+    font-family: "Noto Music";
     color: #282828;
-    margin: 0px;
+    margin: 0;
 }
 
 .nav-bar {
