@@ -18,8 +18,8 @@ Vue.component('product', {
             <h1>{{ title }}</h1>
             <p>{{ description }}</p>
             <span>{{ sale }}</span>
-            <p v-if="inventory > 50">In stock</p>
-            <p v-else-if="inventory <= 10">Almost sold out!</p>
+            <p v-if="inStock">In stock</p>
+            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
             <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
             
             <div class="color-box"
