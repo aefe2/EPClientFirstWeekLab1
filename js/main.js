@@ -62,16 +62,14 @@ Vue.component('product', {
                 }
             ],
             sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-            cart: 0,
         }
     },
     methods: {
         addToCart() {
-            this.cart += 1
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
         },
         removeFromCart() {
-            if (this.cart <= 0) return
-            else this.cart -= 1
+            this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId);
         },
         updateProduct(index) {
             this.selectedVariant = index;
@@ -119,6 +117,15 @@ Vue.component('product-details', {
 let app = new Vue({
     el: '#app',
     data: {
-        premium: true
+        premium: true,
+        cart: [],
+    },
+    methods: {
+        addProductToCart(id) {
+            this.cart.push(id);
+        },
+        removeProductFromCart(id) {
+            this.cart.pop(id);
+        }
     }
 });
