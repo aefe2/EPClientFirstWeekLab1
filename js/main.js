@@ -1,3 +1,5 @@
+let eventBus = new Vue()
+
 Vue.component('product', {
     props: {
         premium: {
@@ -16,10 +18,9 @@ Vue.component('product', {
             <h1>{{ title }}</h1>
             <p>{{ description }}</p>
             <span>{{ sale }}</span>
-            <p v-if="inventory > 10">In stock</p>
+            <p v-if="inventory > 50">In stock</p>
             <p v-else-if="inventory <= 10">Almost sold out!</p>
             <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
-            <p>Shipping: {{ shipping }}</p>
             
             <div class="color-box"
                  v-for="(variant, index) in variants"
@@ -32,7 +33,7 @@ Vue.component('product', {
                 <li v-for="size in sizes">{{ size }}</li>
             </ul>
             
-            <product-details :details="details">{{ details }}</product-details>
+         
             
             <div>
                 <button v-on:click="addToCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">Add</button>
@@ -43,20 +44,8 @@ Vue.component('product', {
             <a :href="link">More products like this</a>
         </div>
         
-        <div>
-            <h2>Reviews</h2>
-            <p v-if="!reviews.length">There are no reviews yet</p>
-            <ul v-else>
-                <li v-for="(review, index) in reviews" :key="index">
-                    <p>{{ review.name }}</p>
-                    <p>Rating: {{ review.rating }}</p>
-                    <p>{{ review.review }}</p>
-                    <p>Recommend: {{ review.recommend }}</p>
-                </li>
-            </ul>
-        </div>
-        
-        <product-review @review-submitted="addReview"></product-review>
+        <product-tabs :reviews="reviews"></product-tabs>
+<!--        <product-info-tabs :shipping="shipping" :details="details"></product-info-tabs>-->
         
     </div>`,
     data() {
@@ -67,8 +56,8 @@ Vue.component('product', {
             selectedVariant: 0,
             altText: "A pair of socks",
             link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks",
-            inventory: 100,
-            onSale: true,
+            inventory: 14,
+            onSale: false,
             details: ['80% cotton', '20% polyester', 'Gender-neutral'],
             reviews: [],
             variants: [
@@ -97,11 +86,12 @@ Vue.component('product', {
         },
         updateProduct(index) {
             this.selectedVariant = index;
-            console.log(index);
         },
-        addReview(productReview) {
+    },
+    mounted() {
+        eventBus.$on('review-submitted', productReview => {
             this.reviews.push(productReview)
-        }
+        })
     },
     computed: {
         title() {
@@ -188,7 +178,7 @@ Vue.component('product-review', {
                     rating: this.rating,
                     recommend: this.recommend
                 }
-                this.$emit('review-submitted', productReview)
+                eventBus.$emit('review-submitted', productReview)
                 this.name = null
                 this.review = null
                 this.rating = null
@@ -216,6 +206,106 @@ Vue.component('product-details', {
     </ul>`,
 
 })
+
+Vue.component('product-tabs', {
+    props: {
+        reviews: {
+            type: Array,
+            required: false
+        },
+        shipping: {
+            required: true
+        },
+        details: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+    <div> 
+    
+        <ul>
+            <span class="tab"
+                :class="{ activeTab: selectedTab === tab }"
+                v-for="(tab, index) in tabs"
+                @click="selectedTab = tab"
+            >{{ tab }}</span>
+        </ul>
+        
+        <div v-show="selectedTab === 'Reviews'">
+            <p v-if="!reviews.length">There are no reviews yet.</p>
+            <ul>
+                <li v-for="review in reviews">
+                    <p>{{ review.name }}</p>
+                    <p>{{ review.review }}</p>
+                    <p>Rating: {{ review.rating }}</p>
+                    <p>{{ review.recommend }}</p>
+                </li>
+            </ul>
+        </div>
+        
+        <div v-show="selectedTab === 'Make a Review'">
+            <product-review></product-review>
+        </div>
+        
+        <div v-show="selectedTab === 'Shipping'">
+            <p>{{ shipping }}</p>
+        </div>
+            
+        <div v-show="selectedTab === 'Details'">
+            <ul>
+                <li v-for="detail in details">{{ detail }}</li>
+            </ul>
+        </div>
+        
+    </div>
+    `,
+    data() {
+        return {
+            tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
+            selectedTab: 'Reviews'
+        }
+    },
+})
+
+// Vue.component('product-info-tabs', {
+//     props: {
+//         shipping: {
+//             required: true
+//         },
+//         details: {
+//             type: Array,
+//             required: true
+//         }
+//     },
+//     template: `
+//     <div>
+//         <ul>
+//             <span class="tab"
+//                 :class="{ activeTab: selectedTab === tab }"
+//                 v-for="(tab, index) in tabs"
+//                 @click="selectedTab = tab"
+//             >{{ tab }}</span>
+//         </ul>
+//
+//         <div v-show="selectedTab === 'Shipping'">
+//             <p>{{ shipping }}</p>
+//         </div>
+//
+//         <div v-show="selectedTab === 'Details'">
+//             <ul>
+//                 <li v-for="detail in details">{{ detail }}</li>
+//             </ul>
+//         </div>
+//     </div>
+//     `,
+//     data() {
+//         return {
+//             tabs: ['Shipping', 'Details'],
+//             selectedTab: 'Shipping'
+//         }
+//     }
+// })
 
 let app = new Vue({
     el: '#app',

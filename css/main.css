@@ -43,6 +43,10 @@ img {
     margin-right: 5px;
 }
 
+.color-box:hover {
+    box-shadow: #282828 0 0 3px;
+}
+
 .cart {
     margin-right: 25px;
     float: right;
