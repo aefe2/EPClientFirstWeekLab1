@@ -33,8 +33,6 @@ Vue.component('product', {
                 <li v-for="size in sizes">{{ size }}</li>
             </ul>
             
-         
-            
             <div>
                 <button v-on:click="addToCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">Add</button>
                 <button v-on:click="removeFromCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">Remove
@@ -44,7 +42,7 @@ Vue.component('product', {
             <a :href="link">More products like this</a>
         </div>
         
-        <product-tabs :reviews="reviews"></product-tabs>
+        <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
 <!--        <product-info-tabs :shipping="shipping" :details="details"></product-info-tabs>-->
         
     </div>`,
@@ -58,8 +56,8 @@ Vue.component('product', {
             link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks",
             inventory: 14,
             onSale: false,
-            details: ['80% cotton', '20% polyester', 'Gender-neutral'],
             reviews: [],
+            details: ['80% cotton', '20% polyester', 'Gender-neutral'],
             variants: [
                 {
                     variantId: 2234,
@@ -121,7 +119,7 @@ Vue.component('product-review', {
     template: `
     <form class="review-form" @submit.prevent="onSubmit">
         <p v-if="errors.length">
-            <b>Please correct the followind error(s):</b>
+            <b>Please correct the following error(s):</b>
             <ul>
                 <li v-for="error in errors">{{ error }}</li>
             </ul>
@@ -193,19 +191,19 @@ Vue.component('product-review', {
     }
 });
 
-Vue.component('product-details', {
-    props: {
-        details: {
-            type: Array,
-            required: true,
-        }
-    },
-    template: `
-    <ul>
-        <li v-for="detail in details">{{ detail }}</li>
-    </ul>`,
-
-})
+// Vue.component('product-details', {
+//     props: {
+//         details: {
+//             type: Array,
+//             required: true,
+//         }
+//     },
+//     template: `
+//     <ul>
+//         <li v-for="detail in details">{{ detail }}</li>
+//     </ul>`,
+//
+// })
 
 Vue.component('product-tabs', {
     props: {
@@ -263,49 +261,11 @@ Vue.component('product-tabs', {
     data() {
         return {
             tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
-            selectedTab: 'Reviews'
+            selectedTab: 'Reviews',
         }
     },
 })
 
-// Vue.component('product-info-tabs', {
-//     props: {
-//         shipping: {
-//             required: true
-//         },
-//         details: {
-//             type: Array,
-//             required: true
-//         }
-//     },
-//     template: `
-//     <div>
-//         <ul>
-//             <span class="tab"
-//                 :class="{ activeTab: selectedTab === tab }"
-//                 v-for="(tab, index) in tabs"
-//                 @click="selectedTab = tab"
-//             >{{ tab }}</span>
-//         </ul>
-//
-//         <div v-show="selectedTab === 'Shipping'">
-//             <p>{{ shipping }}</p>
-//         </div>
-//
-//         <div v-show="selectedTab === 'Details'">
-//             <ul>
-//                 <li v-for="detail in details">{{ detail }}</li>
-//             </ul>
-//         </div>
-//     </div>
-//     `,
-//     data() {
-//         return {
-//             tabs: ['Shipping', 'Details'],
-//             selectedTab: 'Shipping'
-//         }
-//     }
-// })
 
 let app = new Vue({
     el: '#app',
