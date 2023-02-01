@@ -48,8 +48,6 @@ img {
 }
 
 .cart {
-    display: flex;
-    flex-wrap: wrap;
     margin-right: 25px;
     float: right;
     border: 1px solid #d8d8d8;
@@ -64,7 +62,6 @@ img {
 /*}*/
 
 button {
-    margin-top: 30px;
     border: none;
     border-radius: 50px;
     background-color: #1E95EA;
@@ -72,6 +69,7 @@ button {
     height: 40px;
     width: 100px;
     font-size: 14px;
+    margin: 10px;
 }
 
 .disabledButton {

@@ -54,7 +54,7 @@ Vue.component('product', {
             altText: "A pair of socks",
             link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks",
             inventory: 14,
-            onSale: false,
+            onSale: true,
             reviews: [],
             details: ['80% cotton', '20% polyester', 'Gender-neutral'],
             variants: [
@@ -87,8 +87,9 @@ Vue.component('product', {
     },
     mounted() {
         eventBus.$on('review-submitted', productReview => {
-            this.reviews.push(productReview)
-        })
+                this.reviews.push(productReview)
+            },
+            eventBus.$on('add'))
     },
     computed: {
         title() {
@@ -252,29 +253,31 @@ Vue.component('product-tabs', {
 })
 
 Vue.component('cart-detail', {
-    props: {
-        cart: {
-            type: Array,
-            required: true
-        }
-    },
-    methods: {
-        addNewProduct() {
-            this.details.push()
-        }
-    },
-    computed: {
-        addNewProduct() {
-            this.details.push()
-        }
-    },
     template: `
-        <div><p>{{ cart }}</p></div>
-    `,
+    <div>
+        <div v-show="cartVisibility" class="cart-detail">
+            <p>Product: {{  }}</p>
+            <p>Details: {{ details }}</p>
+            <p>Color: {{ color }}</p>
+            <p>Count: {{ count }}</p>
+        </div>
+        <button @click="showCart">Show cart</button>
+    </div>`,
+
     data() {
         return {
-            cart: [],
+            cartVisibility: false,
+            product: null,
+            details: null,
+            color: null,
+            count: 0,
         }
+    },
+    computed: {},
+    methods: {
+        showCart() {
+            this.cartVisibility = !this.cartVisibility;
+        },
     }
 })
 
