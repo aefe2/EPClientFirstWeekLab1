@@ -43,7 +43,6 @@ Vue.component('product', {
         </div>
         
         <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
-<!--        <product-info-tabs :shipping="shipping" :details="details"></product-info-tabs>-->
         
     </div>`,
     data() {
@@ -191,20 +190,6 @@ Vue.component('product-review', {
     }
 });
 
-// Vue.component('product-details', {
-//     props: {
-//         details: {
-//             type: Array,
-//             required: true,
-//         }
-//     },
-//     template: `
-//     <ul>
-//         <li v-for="detail in details">{{ detail }}</li>
-//     </ul>`,
-//
-// })
-
 Vue.component('product-tabs', {
     props: {
         reviews: {
@@ -266,6 +251,32 @@ Vue.component('product-tabs', {
     },
 })
 
+Vue.component('cart-detail', {
+    props: {
+        cart: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        addNewProduct() {
+            this.details.push()
+        }
+    },
+    computed: {
+        addNewProduct() {
+            this.details.push()
+        }
+    },
+    template: `
+        <div><p>{{ cart }}</p></div>
+    `,
+    data() {
+        return {
+            cart: [],
+        }
+    }
+})
 
 let app = new Vue({
     el: '#app',
