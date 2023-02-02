@@ -86,8 +86,6 @@ Vue.component('product', {
                 product: this.product,
                 variant: this.variants[this.selectedVariant].variantId,
                 color: this.variants[this.selectedVariant].variantColor,
-                onSale: this.onSale
-
             };
             this.$emit('add-to-cart', cartItem);
         },
