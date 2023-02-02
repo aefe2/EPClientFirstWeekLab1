@@ -68,15 +68,28 @@ Vue.component('product', {
                     variantId: 2235,
                     variantColor: 'blue',
                     variantImage: "./assets/vmSocks-blue-onWhite.jpg",
-                    variantQuantity: 0,
-                }
+                    variantQuantity: 7,
+                },
+                {
+                    variantId: 2236,
+                    variantColor: 'white',
+                    variantImage: "https://lonnamag.ru/upload/iblock/d3f/d3f271c842a2f044b7bcdea30fa1cfc2.png",
+                    variantQuantity: 2,
+                },
             ],
             sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
         }
     },
     methods: {
         addToCart() {
-            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
+            let cartItem = {
+                product: this.product,
+                variant: this.variants[this.selectedVariant].variantId,
+                color: this.variants[this.selectedVariant].variantColor,
+                onSale: this.onSale
+
+            };
+            this.$emit('add-to-cart', cartItem);
         },
         removeFromCart() {
             this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId);
@@ -87,9 +100,8 @@ Vue.component('product', {
     },
     mounted() {
         eventBus.$on('review-submitted', productReview => {
-                this.reviews.push(productReview)
-            },
-            eventBus.$on('add'))
+            this.reviews.push(productReview)
+        })
     },
     computed: {
         title() {
@@ -253,13 +265,41 @@ Vue.component('product-tabs', {
 })
 
 Vue.component('cart-detail', {
+    props: {
+        goods: {
+            type: Array,
+            required: false
+        },
+        materials: {
+            type: Array,
+            required: false
+        }
+    },
     template: `
     <div>
         <div v-show="cartVisibility" class="cart-detail">
-            <p>Product: {{  }}</p>
-            <p>Details: {{ details }}</p>
-            <p>Color: {{ color }}</p>
-            <p>Count: {{ count }}</p>
+            <table v-if="goods.length">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Item</th>
+                        <th>Details</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(good, index) in goods">
+                    <div class="cart-buttons">
+                        <a href="#">+</a>
+                        <a href="#">-</a>
+                    </div>    
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ good.product }}</td>
+                        <td>{{ good.color }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p v-else>Your cart empty</p>
         </div>
         <button @click="showCart">Show cart</button>
     </div>`,
@@ -267,13 +307,8 @@ Vue.component('cart-detail', {
     data() {
         return {
             cartVisibility: false,
-            product: null,
-            details: null,
-            color: null,
-            count: 0,
         }
     },
-    computed: {},
     methods: {
         showCart() {
             this.cartVisibility = !this.cartVisibility;

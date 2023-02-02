@@ -14,7 +14,7 @@
 <div id="app">
     <div class="cart">
         <div>Cart {{ cart.length }}</div>
-        <cart-detail></cart-detail>
+        <cart-detail :goods="cart" :productDetails="details"></cart-detail>
     </div>
     <product :premium="premium" @add-to-cart="addProductToCart" @remove-from-cart="removeProductFromCart"></product>
 </div>
